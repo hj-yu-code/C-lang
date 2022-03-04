@@ -21,6 +21,6 @@ int main(){
         }
     }
 
-    printf("%dì—ì„œ %dê¹Œì§€ì˜ í•© : %d \n", start, end, sum);
+    printf("%d¿¡¼­ %d±îÁöÀÇ ÇÕ : %d \n", start, end, sum);
     return 0;
 }

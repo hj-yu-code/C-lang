@@ -10,7 +10,7 @@ int main()
 	double dnum;
 
     printf("input char ? ");
-	scanf(" %c", &ch); //ê³µë°±ì§€ì •ì : ì…ë ¥ë²„í¼ì˜ space, [enter], tabì„ ë²„ë¦°ë‹¤
+	scanf(" %c", &ch); //°ø¹éÁöÁ¤ÀÚ : ÀÔ·Â¹öÆÛÀÇ space, [enter], tabÀ» ¹ö¸°´Ù
 
 	printf("input short int ? ");
 	scanf("%hd", &n1);

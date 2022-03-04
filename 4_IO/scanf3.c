@@ -16,7 +16,7 @@ void func_1(void)
 {
     int first, second;
 	
-	printf("ë‘ ìˆ˜ë¥¼ ì…ë ¥í•˜ì„¸ìš” ? ");
+	printf("µÎ ¼ö¸¦ ÀÔ·ÂÇÏ¼¼¿ä ? ");
 	scanf("%d%d", &first, &second);
 
 	printf("first : %d, second : %d \n", first, second);
@@ -27,7 +27,7 @@ void func_2(void)
      int first, second;
 	 char op=0;
 	 
-	 printf("ì „í™”ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš” ? "); //123-5551
+	 printf("ÀüÈ­¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä ? "); //123-5551
 	 scanf("%d%c%d", &first, &op,  &second);
 
 	 printf("first : %d, second : %d \n", first, second);
@@ -38,7 +38,7 @@ void func_3(void)
 {
      int first, second;
 	 
-	 printf("5ìë¦¬ì´ìƒ ìˆ«ìë¥¼ ì…ë ¥í•˜ì„¸ìš” ? ");
+	 printf("5ÀÚ¸®ÀÌ»ó ¼ıÀÚ¸¦ ÀÔ·ÂÇÏ¼¼¿ä ? ");
 	 scanf("%3d %d", &first, &second);
 	 
 	 printf("first : %d, second : %d \n", first, second);
