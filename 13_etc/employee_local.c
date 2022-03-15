@@ -1,4 +1,3 @@
-//employee1.c
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -7,33 +6,23 @@
 
 #define BUF_SIZE 50
 
-typedef struct employee {
+typedef struct employee
+{
 	char id[6];
 	char name[20];
 	int position;
 	int salary;
 	char comAddr[BUF_SIZE];
 	struct employee* next;
-} EMPLOYEE, * LPEMPLOYEE;
-//구조체 자료형명, 구조체 포인터 자료형 명
-
-//EMPLOYEE a, * head;  //a는 구조체 변수  //struct employee a, *head; 와 같은 문법.
-EMPLOYEE* head;
-LPEMPLOYEE tail;
-
+} EMPLOYEE, * LPEMPLOYEE; // 구조체 자료형명, 구조체 포인터 자료형명
 
 int seq_no = 0;
 
 void str_check(char* msg, int size, char* f_addr);
 void num_check(char* msg, int max, int min, int* f_addr);
-void emp_input();
+// void emp_input();
+
 char* showPosition(int pos);
-void emp_output();
-void emp_find();
-void emp_delete();
-void emp_save();
-void emp_load();
-void node_free();
 
 
 //"성명", 20, 3006
@@ -42,9 +31,10 @@ void str_check(char* msg, int size, char* f_addr)
 {
 	char tmp[255];
 
-	do {
+	do
+	{
 		printf("%s ? ", msg);
-		gets(tmp); //seoul aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, kim ??
+		gets(tmp); //seoul aaaaaaaaaaaaaaaaaaaaaaaaaaaa, kim ??
 	} while (strlen(tmp) >= size);
 
 	strcpy(f_addr, tmp);
@@ -55,17 +45,20 @@ void str_check(char* msg, int size, char* f_addr)
 void num_check(char* msg, int max, int min, int* f_addr)
 {
 	int tmp = 10;
-	do{
+
+	do
+	{
 		printf("%s ? ", msg);
-		scanf("%d", &tmp);
-		fflush(stdin); // 찾아보기!!!
-	} while (tmp>max || tmp<min);
-	// while (tmp<min || tmp>max);
+		scanf("%d", &tmp); //7[enter] , aaa
+		fflush(stdin);
+	} while (tmp<min || tmp>max);
+
 	*f_addr = tmp;
+
 	fflush(stdin);
 }
 
-void emp_input()
+void emp_input(EMPLOYEE **Head,EMPLOYEE **Tail) //head 주소를 받음
 {
 	EMPLOYEE* ptr;
 
@@ -79,8 +72,6 @@ void emp_input()
 		}
 
 		seq_no++;
-		//코드추가
-		// sprintf(ptr->id, "%d", seq_no);
 		sprintf(ptr->id, "A%.4d", seq_no);
 
 		str_check("\n성명(입력종료:end)", sizeof(ptr->name), ptr->name);
@@ -100,42 +91,46 @@ void emp_input()
 		ptr->next = NULL;
 
 		//코드입력
-		if (head == NULL)
-			head = tail = ptr;
+		if (*Head == NULL)
+			*Head = *Tail = ptr;
 		else
 		{
-			tail->next = ptr;
-			tail = ptr;
+			(*Tail)->next = ptr;
+			*Tail = ptr;
 		}
 	}
+
 	free(ptr);
 }//emp_input() end
 
 char* showPosition(int pos)
 {
-    static char POS[4][20] = {"부장", "과장", "대리", "사원"};
-    return POS[pos];
+	static char POS[4][20] = { "부장","과장","대리","사원" };
+
+	return POS[pos];
 }
 
-void emp_output()
+void emp_output(EMPLOYEE *Head) // head 내용 그대로
 {
 	EMPLOYEE* ptr;
 
-	ptr = head;
+	ptr = Head;
 	while (ptr)
 	{
 		printf("%s, %s, %s, %d, %s \n", ptr->id, ptr->name, showPosition(ptr->position), ptr->salary, ptr->comAddr);
+
 		ptr = ptr->next;
 	}
 }//emp_output() end
 
-void emp_find()
+
+void emp_find(EMPLOYEE *Head)
 {
 	EMPLOYEE* ptr;
 	int found;
 	char s_name[20];
 
-	ptr = head;
+	ptr = Head;
 	if (ptr == NULL)
 	{
 		printf(" 등록되어 있지 않습니다. \n");
@@ -150,16 +145,14 @@ void emp_find()
 			break;
 
 		found = 1;
-		ptr = head;
+		ptr = Head;
 
 		while (ptr)
 		{
 			if (!strcmp(ptr->name, s_name))
 			{
 				found = 0;
-				printf("%s, %s, %d, %d, %s \n", ptr->id, ptr->name,
-					ptr->position,
-					ptr->salary, ptr->comAddr);
+				printf("%s, %s, %d, %d, %s \n", ptr->id, ptr->name, ptr->position, ptr->salary, ptr->comAddr);
 			}
 			ptr = ptr->next;
 		}
@@ -171,13 +164,13 @@ void emp_find()
 
 }//emp_find() end
 
-void emp_delete()
+void emp_delete(EMPLOYEE **Head,EMPLOYEE **Tail)
 {
 	EMPLOYEE* ptr, * prev;
 	int found;
 	char ch, s_id[10];
 
-	ptr = head;
+	ptr = *Head;
 	if (ptr == NULL)
 	{
 		printf("등록되어 있지 않습니다. \n");
@@ -189,33 +182,41 @@ void emp_delete()
 
 	*s_id = toupper(*s_id);
 
-    found = 1;
-	//코드 추가
+	found = 1;
 	while (ptr)
-    {
-        if(strcmp(ptr->id, s_id) == 0){
-            printf("%s, %s, %d, %d, %s \n", ptr->id, ptr->name, ptr->position, ptr->salary, ptr->comAddr);
-            printf("삭제할까요 ? (y/n) ");
-            scanf("%c%*c", &ch);
+	{
+		if (strcmp(ptr->id, s_id) == 0)
+		{
+			printf("%s, %s, %d, %d, %s \n", ptr->id, ptr->name, ptr->position, ptr->salary, ptr->comAddr);
+			printf(" 삭제할까요 ?(y/n) ");
+			scanf("%c%*c", &ch); //y[enter], n[enter]
+			if (ch == 'Y' || ch == 'y')
+			{
+				if (ptr == *Head)
+				{
+					*Head = ptr->next;
+				}
+				else if (ptr == *Tail)
+				{
+					*Tail = prev;
+					(*Tail)->next = NULL;
+				}
+				else
+				{
+					prev->next = ptr->next;
+				}
 
-            if(ch=='y'||ch=='Y'){
-                if(ptr == head){
-                    head = ptr->next;
-                }else if(ptr == tail){
-                    tail = prev;
-                    tail->next = NULL;
-                }else{
-                    prev->next = ptr->next;
-                }
-                free(ptr);
-                found = 0;
-            }
-            break;
-        }
-        prev = ptr;
-        ptr = ptr->next;
-    }
-    
+				free(ptr);
+				found = 0;
+			}
+
+			break;
+		} //if end
+
+		prev = ptr;
+		ptr = ptr->next;
+	} //while(ptr) end
+
 	if (found)
 		printf("노드삭제 안 됨!!!\n");
 	else
@@ -223,25 +224,26 @@ void emp_delete()
 
 }//emp_delete() end
 
-void node_free()
+void node_free(EMPLOYEE *Head)
 {
 	EMPLOYEE* ptr, * x;
 
-	ptr = head;
+	ptr = Head;
 	while (ptr)
 	{
 		x = ptr;
 		ptr = ptr->next;
+
 		free(x);
 	}
 }//node_free() end
 
-void emp_save(void)
+void emp_save(EMPLOYEE *Head)
 {
 	EMPLOYEE* ptr;
 	FILE* fp;
 
-	ptr = head;
+	ptr = Head;
 	if (ptr == NULL)
 	{
 		printf("등록되어 있지 않습니다. \n");
@@ -267,7 +269,7 @@ void emp_save(void)
 	printf("사원정보 save. \n");
 } //emp_save() end
 
-void emp_load(void)
+void emp_load(EMPLOYEE **Head,EMPLOYEE **Tail)
 {
 	struct employee* ptr;
 	FILE* fp;
@@ -293,12 +295,12 @@ void emp_load(void)
 		if (fread(ptr, sizeof(EMPLOYEE), 1, fp) != 1)
 			break;
 
-		if (head == NULL)
-			head = tail = ptr;
+		if (*Head == NULL)
+			*Head = *Tail = ptr;
 		else
 		{
-			tail->next = ptr;
-			tail = ptr;
+			(*Tail)->next = ptr;
+			*Tail = ptr;
 		}
 	}
 	fclose(fp);
@@ -309,10 +311,12 @@ void emp_load(void)
 
 int main()
 {
+    EMPLOYEE* head;
+    LPEMPLOYEE tail;
 	int choice, stop = 1, count;
 
 	head = tail = NULL;
-	emp_load();
+	emp_load(&head, &tail);
 
 	while (stop)
 	{
@@ -326,21 +330,20 @@ int main()
 		scanf("%d%*c", &choice);
 		switch (choice)
 		{
-		case 1: emp_input();
+		case 1: emp_input(&head, &tail);
 			break;
-		case 2: emp_output();
+		case 2: emp_output(head);
 			break;
-		case 3: emp_find();
+		case 3: emp_find(head);
 			break;
-		case 4: emp_delete();
+		case 4: emp_delete(&head, &tail);
 			break;
-		case 5: emp_save();
+		case 5: emp_save(head);
 			break;
-		case 6: node_free();
+		case 6: node_free(head);
 			stop = 0;
 			break;
 		}
-
 	}
 
 	return 0;
