@@ -1,4 +1,3 @@
-//employee1.c
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -7,20 +6,19 @@
 
 #define BUF_SIZE 50
 
-typedef struct employee {
+typedef struct employee
+{
 	char id[6];
 	char name[20];
 	int position;
 	int salary;
 	char comAddr[BUF_SIZE];
 	struct employee* next;
-} EMPLOYEE, * LPEMPLOYEE;
-//구조체 자료형명, 구조체 포인터 자료형 명
+} EMPLOYEE, * LPEMPLOYEE; // 구조체 자료형명, 구조체 포인터 자료형명
 
-//EMPLOYEE a, * head;  //a는 구조체 변수  //struct employee a, *head; 와 같은 문법.
-EMPLOYEE* head;
+//struct employee a, * head;
+EMPLOYEE a, * head;
 LPEMPLOYEE tail;
-
 
 int seq_no = 0;
 
@@ -42,9 +40,10 @@ void str_check(char* msg, int size, char* f_addr)
 {
 	char tmp[255];
 
-	do {
+	do
+	{
 		printf("%s ? ", msg);
-		gets(tmp); //seoul aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, kim ??
+		gets(tmp); //seoul aaaaaaaaaaaaaaaaaaaaaaaaaaaa, kim ??
 	} while (strlen(tmp) >= size);
 
 	strcpy(f_addr, tmp);
@@ -55,13 +54,16 @@ void str_check(char* msg, int size, char* f_addr)
 void num_check(char* msg, int max, int min, int* f_addr)
 {
 	int tmp = 10;
-	do{
+
+	do
+	{
 		printf("%s ? ", msg);
-		scanf("%d", &tmp);
-		fflush(stdin); // 찾아보기!!!
-	} while (tmp>max || tmp<min);
-	// while (tmp<min || tmp>max);
+		scanf("%d", &tmp); //7[enter] , aaa
+		fflush(stdin);
+	} while (tmp<min || tmp>max);
+
 	*f_addr = tmp;
+
 	fflush(stdin);
 }
 
@@ -79,8 +81,6 @@ void emp_input()
 		}
 
 		seq_no++;
-		//코드추가
-		// sprintf(ptr->id, "%d", seq_no);
 		sprintf(ptr->id, "A%.4d", seq_no);
 
 		str_check("\n성명(입력종료:end)", sizeof(ptr->name), ptr->name);
@@ -108,13 +108,15 @@ void emp_input()
 			tail = ptr;
 		}
 	}
+
 	free(ptr);
 }//emp_input() end
 
 char* showPosition(int pos)
 {
-    static char POS[4][20] = {"부장", "과장", "대리", "사원"};
-    return POS[pos];
+	static char POS[4][20] = { "부장","과장","대리","사원" };
+
+	return POS[pos];
 }
 
 void emp_output()
@@ -125,6 +127,7 @@ void emp_output()
 	while (ptr)
 	{
 		printf("%s, %s, %s, %d, %s \n", ptr->id, ptr->name, showPosition(ptr->position), ptr->salary, ptr->comAddr);
+
 		ptr = ptr->next;
 	}
 }//emp_output() end
@@ -157,9 +160,7 @@ void emp_find()
 			if (!strcmp(ptr->name, s_name))
 			{
 				found = 0;
-				printf("%s, %s, %d, %d, %s \n", ptr->id, ptr->name,
-					ptr->position,
-					ptr->salary, ptr->comAddr);
+				printf("%s, %s, %d, %d, %s \n", ptr->id, ptr->name, ptr->position, ptr->salary, ptr->comAddr);
 			}
 			ptr = ptr->next;
 		}
@@ -189,33 +190,41 @@ void emp_delete()
 
 	*s_id = toupper(*s_id);
 
-    found = 1;
-	//코드 추가
+	found = 1;
 	while (ptr)
-    {
-        if(strcmp(ptr->id, s_id) == 0){
-            printf("%s, %s, %d, %d, %s \n", ptr->id, ptr->name, ptr->position, ptr->salary, ptr->comAddr);
-            printf("삭제할까요 ? (y/n) ");
-            scanf("%c%*c", &ch);
+	{
+		if (strcmp(ptr->id, s_id) == 0)
+		{
+			printf("%s, %s, %d, %d, %s \n", ptr->id, ptr->name, ptr->position, ptr->salary, ptr->comAddr);
+			printf(" 삭제할까요 ?(y/n) ");
+			scanf("%c%*c", &ch); //y[enter], n[enter]
+			if (ch == 'Y' || ch == 'y')
+			{
+				if (ptr == head)
+				{
+					head = ptr->next;
+				}
+				else if (ptr == tail)
+				{
+					tail = prev;
+					tail->next = NULL;
+				}
+				else
+				{
+					prev->next = ptr->next;
+				}
 
-            if(ch=='y'||ch=='Y'){
-                if(ptr == head){
-                    head = ptr->next;
-                }else if(ptr == tail){
-                    tail = prev;
-                    tail->next = NULL;
-                }else{
-                    prev->next = ptr->next;
-                }
-                free(ptr);
-                found = 0;
-            }
-            break;
-        }
-        prev = ptr;
-        ptr = ptr->next;
-    }
-    
+				free(ptr);
+				found = 0;
+			}
+
+			break;
+		} //if end
+
+		prev = ptr;
+		ptr = ptr->next;
+	} //while(ptr) end
+
 	if (found)
 		printf("노드삭제 안 됨!!!\n");
 	else
@@ -232,6 +241,7 @@ void node_free()
 	{
 		x = ptr;
 		ptr = ptr->next;
+
 		free(x);
 	}
 }//node_free() end
@@ -340,7 +350,6 @@ int main()
 			stop = 0;
 			break;
 		}
-
 	}
 
 	return 0;
